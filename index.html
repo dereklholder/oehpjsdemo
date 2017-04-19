@@ -1,0 +1,84 @@
+<html>
+  <style>
+    #myIframe { height : 600px;
+                width : 600px;
+                background-color: white;
+                margin: 0}
+    #wrapper {margin-left: 100px;}
+    #content { float: right;
+              margin-left: -100px;
+              width: 100%;
+              background-color: white}
+    #sidebar {float: left;
+              width: 100px;
+              margin-left: -100px;
+              background-color: white;}
+    #cleared { clear: both}
+  </style>
+  <head>
+    <title>OEHP Node.js Demo</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/trontastic/jquery-ui.css">
+    <script>
+      $(document).ready(function(){
+        var orderid,amount,entrymode,chargetype;
+        
+        $("#submit").click(function(res){
+          orderid=$("#orderid").val();
+          amount=$("#amount").val();
+          entrymode=$("#entrymode").val();
+          chargetype=$("#chargetype").val();
+
+          $.post("http://localhost:3000/payment",{orderid: orderid, amount: amount, entrymode: entrymode, chargetype: chargetype}, function(data){
+            var payPageUrl = data;
+              $("#dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 650,
+                height: 500,
+                closeText: "",
+                closeOnEscape: true,
+                position: {my: "left top", at: "left top", of: window},
+                open: function(ev, ui){
+                  $('#myIframe').attr('src', payPageUrl).attr('hidden', false);
+                }
+              });
+              $('#dialog').dialog('open');
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>OEHP Node.js Demo</h1>
+    <div id=wrapper>
+      <div id="content">
+        <input type="TEXT" id="orderid" size="10"/><br>
+        <input type="TEXT" id="amount" size="10"/><br>
+        <select id=chargetype>
+                    <option value="SALE">SALE</option>
+                    <option value="AUTH">AUTH</option>
+                    <option value="CREDIT">CREDIT</option>
+        </select><br>
+        <select id=entrymode>
+                    <option value="KEYED">KEYED</option>
+                    <option value="EMV">EMV</option>
+                    <option value="AUTO">AUTO</option>
+        </select><br>
+      </div>
+      <div id="sidebar">
+        Order ID:<br>
+        Charge Total:<br>
+        Charge Type:<br>
+        Entry Mode:<br>
+        <input type="button" id="submit" value="Submit"/>
+      </div>
+    </div>
+    
+    <div id="dialog">
+      <iframe id="myIframe" src="" hidden="true"></iframe>
+    </div>
+  </body>
+</html>

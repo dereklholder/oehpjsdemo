@@ -1,0 +1,11 @@
+{
+    "name": "oehp-demo",
+    "version": "0.0.1",
+    "dependencies": {
+        "body-parser": "^1.8.1",
+        "express": "^4.9.0",
+        "querystring": "0.2.0",
+        "https": "1.0.0",
+        "popups": "1.1.3"
+    }
+}
